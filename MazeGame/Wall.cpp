@@ -8,3 +8,8 @@ void Wall::Draw()
 {
 	cout << "This is a Wall on the " << sideNames[this->side]<<" side\n";
 }
+
+bool Wall::CanWalkThrough()
+{
+	return false;
+}

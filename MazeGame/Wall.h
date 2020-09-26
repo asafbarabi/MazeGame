@@ -5,4 +5,5 @@ class Wall : public Partition
 public:
 	Wall(Side side);
 	void Draw();
+	bool CanWalkThrough();
 };

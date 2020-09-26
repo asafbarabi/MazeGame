@@ -16,5 +16,6 @@ public:
 
 	Partition(Side side);
 	virtual void Draw();
+	virtual bool CanWalkThrough();
 };
 

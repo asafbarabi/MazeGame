@@ -8,3 +8,8 @@ void Door::Draw()
 {
 	cout << "This is a Door on the " << sideNames[this->side]<<" side\n";
 }
+
+bool Door::CanWalkThrough()
+{
+	return true;
+}
