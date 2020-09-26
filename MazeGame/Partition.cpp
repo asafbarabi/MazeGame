@@ -13,11 +13,6 @@ Partition::Partition(Side side, IRoom* roomBehind):Partition(side)
 	this->RoomBehind = roomBehind;
 }
 
-void Partition::Draw()
-{
-	cout << "drew" << sideNames[this->side] << "partition";
-}
-
 bool Partition::CanWalkThrough()
 {
 	return false;

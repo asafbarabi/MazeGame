@@ -4,6 +4,6 @@ class Door : public Partition
 {
 public:
 	Door(Side side);
-	void Draw();
+	void Draw(Point* location, int roomSize);
 	bool CanWalkThrough();
 };

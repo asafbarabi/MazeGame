@@ -4,7 +4,7 @@ using namespace std;
 
 Door::Door(Side side):Partition(side){}
 
-void Door::Draw()
+void Door::Draw(Point* location, int roomSize)
 {
 	cout << "This is a Door on the " << sideNames[this->side]<<" side\n";
 }

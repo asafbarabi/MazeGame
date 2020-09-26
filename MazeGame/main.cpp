@@ -4,13 +4,14 @@
 #include "Wall.h"
 using namespace std;
 
-void main() 
+void main()
 {
 	Door upDoor(Side::up);
 	Door rightDoor(Side::right);
 	Wall downWall(Side::down);
 	Wall leftWall(Side::left);
 	Room room(&upDoor, &downWall, &rightDoor, &leftWall);
-	room.Draw();
+	//room.Draw();
+
 	system("pause");
 }

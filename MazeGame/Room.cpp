@@ -2,21 +2,27 @@
 #include "Room.h"
 using namespace std;
 
-
-Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition)
+Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition, int roomSize)
 {
 	this->UpPartition = upPartition;
 	this->DownPartition = downPartition;
 	this->RightPartition = rightPartition;
 	this->LeftPartition = leftPartition;
+	this->RoomSize = roomSize;
+
 }
 
-void Room::Draw()
+//Default ctor with roomSize =5
+Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition) :Room(upPartition, downPartition, rightPartition, leftPartition, 5)
 {
-	this->UpPartition->Draw();
-	this->DownPartition->Draw();
-	this->RightPartition->Draw();
-	this->LeftPartition->Draw();
+}
+
+void Room::Draw(Point* location)
+{
+	this->UpPartition->Draw(location, this->RoomSize);
+	this->DownPartition->Draw(location, this->RoomSize);
+	this->RightPartition->Draw(location, this->RoomSize);
+	this->LeftPartition->Draw(location, this->RoomSize);
 }
 
 IPartition* Room::GetPartition(Side side)
