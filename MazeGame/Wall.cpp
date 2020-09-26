@@ -6,7 +6,7 @@ Wall::Wall(Side side):Partition(side){}
 
 void Wall::Draw()
 {
-	cout << "This is a Wall on the " << sideNames[this->side]<<" side\n";
+	//cout << "This is a Wall on the " << sideNames[this->side]<<" side\n";
 }
 
 bool Wall::CanWalkThrough()

@@ -18,3 +18,23 @@ void Room::Draw()
 	this->RightPartition->Draw();
 	this->LeftPartition->Draw();
 }
+
+IPartition* Room::GetPartition(Side side)
+{
+	switch (side)
+	{
+	case Side::up:
+		return this->UpPartition;
+	case Side::down:
+		return this->DownPartition;
+		break;
+	case Side::left:
+		return this->LeftPartition;
+		break;
+	case Side::right:
+		return this->RightPartition;
+		break;
+	default:
+		break;
+	}
+}

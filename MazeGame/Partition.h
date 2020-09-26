@@ -1,24 +1,21 @@
 #pragma once
 #include "IPartition.h"
-#include "Room.h"
-static const char* sideNames[] = { "up", "down", "left","right" };
-enum Side
-{
-	up = 0,
-	down,
-	left,
-	right
-};
+#include "IRoom.h"
+#include "SideClass.h"
+
 
 class Partition : public IPartition
 {
 public:
 	Side side;
-	Room* RoomBehind;
+	IRoom* RoomBehind;
 
 	Partition(Side side);
-	Partition(Side side,Room* roomBehind);
+	Partition(Side side,IRoom* roomBehind);
 	virtual void Draw() = 0;
 	virtual bool CanWalkThrough() = 0;
+
+	// Inherited via IPartition
+	virtual IRoom* GetRoomBehind() override;
 };
 
