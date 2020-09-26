@@ -1,16 +1,14 @@
 #pragma once
-#include "Partition.h"
+#include "IPartition.h"
 #include "point.h"
 class Room
 {
 public:
-	Room(Partition* upPartition, Partition* downPartition, Partition* rightPartition, Partition* leftPartition);
+	IPartition* UpPartition;
+	IPartition* DownPartition;
+	IPartition* RightPartition;
+	IPartition* LeftPartition;
+	Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition);
 	void Draw();
-private:
-	Point Location;
-	Partition* UpPartition;
-	Partition* DownPartition;
-	Partition* RightPartition;
-	Partition* LeftPartition;
 };
 

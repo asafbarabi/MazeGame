@@ -1,5 +1,6 @@
 #pragma once
-
+#include "IPartition.h"
+#include "Room.h"
 static const char* sideNames[] = { "up", "down", "left","right" };
 enum Side
 {
@@ -9,13 +10,15 @@ enum Side
 	right
 };
 
-class Partition
+class Partition : public IPartition
 {
 public:
 	Side side;
+	Room* RoomBehind;
 
 	Partition(Side side);
-	virtual void Draw();
-	virtual bool CanWalkThrough();
+	Partition(Side side,Room* roomBehind);
+	virtual void Draw() = 0;
+	virtual bool CanWalkThrough() = 0;
 };
 

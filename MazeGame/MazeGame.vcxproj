@@ -143,6 +143,7 @@
     <ClInclude Include="ExternalRoom.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InternalRoom.h" />
+    <ClInclude Include="IPartition.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Player.h" />

@@ -3,7 +3,7 @@
 using namespace std;
 
 
-Room::Room(Partition* upPartition, Partition* downPartition, Partition* rightPartition, Partition* leftPartition)
+Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition)
 {
 	this->UpPartition = upPartition;
 	this->DownPartition = downPartition;
