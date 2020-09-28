@@ -13,9 +13,9 @@ void Wall::Draw(int x, int y, int roomSize)
 {
 	ConsoleDrawer* consoleDrawer;
 	consoleDrawer = consoleDrawer->GetInstance();
-
 	if (this->side == Side::up || this->side == Side::down)
 	{
+
 		//Draw pixels
 		for (int i = y; i < y + WALL_SIZE; i++)
 		{

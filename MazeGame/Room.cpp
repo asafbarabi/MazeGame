@@ -35,6 +35,11 @@ void Room::Draw(int x, int y)
 	this->DownPartition->Draw(x, rightY, RoomSize + 1);
 }
 
+void Room::Draw()
+{
+	Draw(x, y);
+}
+
 IPartition* Room::GetPartition(Side side)
 {
 	switch (side)

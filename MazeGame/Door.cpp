@@ -32,7 +32,7 @@ void Door::Draw(int x, int y, int roomSize)
 		{
 			for (int j = y; j < y + roomSize; j++)
 			{
-				consoleDrawer->WritePixel(j, i, '.');
+				consoleDrawer->WritePixel(i, j, '.');
 			}
 		}
 	}
