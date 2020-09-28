@@ -13,6 +13,7 @@ int main()
 	Wall leftWall(Side::left);
 	Room room(&upDoor, &downWall, &rightDoor, &leftWall);
 	room.Draw(0,0);
+	cout << "\n";
 	system("pause");
 	return 0;
 }

@@ -23,16 +23,16 @@ Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* right
 
 void Room::Draw(int x, int y)
 {
-	this->UpPartition->Draw(x, y, RoomSize);
 
-	this->LeftPartition->Draw(x, y, RoomSize);
+	this->UpPartition->Draw(x, y, RoomSize + 1);
 
-	int downY = y + RoomSize;
-	this->DownPartition->Draw(x, downY, RoomSize);
+	this->LeftPartition->Draw(x, y + 1, RoomSize - 1);
 
-	int rightX = x + RoomSize;
+	int downX = x + RoomSize;
+	this->RightPartition->Draw(downX, y + 1, RoomSize - 1);
 
-	this->RightPartition->Draw(rightX, y, RoomSize);
+	int rightY = y + RoomSize;
+	this->DownPartition->Draw(x, rightY, RoomSize + 1);
 }
 
 IPartition* Room::GetPartition(Side side)
