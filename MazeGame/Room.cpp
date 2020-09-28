@@ -1,9 +1,13 @@
 #include <iostream>
+#include<windows.h>
 #include "Room.h"
 using namespace std;
+int ROOM_SIZE = 8;
 
 Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition, int roomSize)
 {
+	this->x = 0;
+	this->y = 0;
 	this->UpPartition = upPartition;
 	this->DownPartition = downPartition;
 	this->RightPartition = rightPartition;
@@ -12,17 +16,23 @@ Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* right
 
 }
 
-//Default ctor with roomSize =5
-Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition) :Room(upPartition, downPartition, rightPartition, leftPartition, 5)
+//Default ctor with roomSize =ROOM_SIZE
+Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition) :Room(upPartition, downPartition, rightPartition, leftPartition, ROOM_SIZE)
 {
 }
 
-void Room::Draw(Point* location)
+void Room::Draw(int x, int y)
 {
-	this->UpPartition->Draw(location, this->RoomSize);
-	this->DownPartition->Draw(location, this->RoomSize);
-	this->RightPartition->Draw(location, this->RoomSize);
-	this->LeftPartition->Draw(location, this->RoomSize);
+	this->UpPartition->Draw(x, y, RoomSize);
+
+	this->LeftPartition->Draw(x, y, RoomSize);
+
+	int downY = y + RoomSize;
+	this->DownPartition->Draw(x, downY, RoomSize);
+
+	int rightX = x + RoomSize;
+
+	this->RightPartition->Draw(rightX, y, RoomSize);
 }
 
 IPartition* Room::GetPartition(Side side)

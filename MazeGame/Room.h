@@ -1,13 +1,12 @@
 #pragma once
 #include "IPartition.h"
-#include "point.h"
 #include "IRoom.h"
 #pragma once
 class Room : public IRoom
 {
 public:
 	//the upper left of the room 
-	Point Location;
+	int x, y;
 	int RoomSize;
 	IPartition* UpPartition;
 	IPartition* DownPartition;
@@ -17,7 +16,7 @@ public:
 	Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition);
 	Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition, int roomSize);
 
-	void Draw(Point* location);
+	void Draw(int x, int y);
 
 	//TODO Sagie add getters and setters
 

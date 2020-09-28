@@ -148,7 +148,6 @@
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Point.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SideClass.h" />
     <ClInclude Include="Treasure.h" />
@@ -163,7 +162,6 @@
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Partition.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Wall.cpp" />

@@ -6,7 +6,7 @@ class Point;
 class IRoom
 {
 public:
-	virtual void Draw(Point* Location) = 0;
+	virtual void Draw(int x, int y) = 0;
 	virtual IPartition* GetPartition(Side side) = 0;
 
 };
