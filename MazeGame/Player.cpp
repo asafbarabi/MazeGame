@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player(IRoom* currentRoom)
+Player::Player(string name)
 {
-	CurrentRoom = currentRoom;
 	Score = 0;
 	Steps = 0;
+	this->name = name;
 }
 
 bool Player::Step(Side side)
@@ -36,4 +36,14 @@ bool Player::GetContentOfNextRoom(Side side)
 	}
 	else
 		return false;
+}
+
+void Player::Draw(int playerNumber)
+{
+	ConsoleDrawer* consoleDrawer;
+	consoleDrawer = consoleDrawer->GetInstance();
+	int indexX = this->CurrentRoom->GetIndexX();
+	int indexY = this->CurrentRoom->GetIndexY();
+	//I added +2 and +1 so it will be drawen inside a room and not beside it
+	consoleDrawer->WriteString(indexX * this->CurrentRoom->GetRoomSize() + 2, indexY * this->CurrentRoom->GetRoomSize() + 1, this->name);
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include<windows.h>
 #include "Room.h"
+#include "ConsoleDrawer.h"
 using namespace std;
 int ROOM_SIZE = 8;
 
@@ -23,16 +24,23 @@ Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* right
 
 void Room::Draw(int x, int y)
 {
+	int pixelX = x * RoomSize;
+	int pixely = y * RoomSize;
+	this->UpPartition->Draw(pixelX, pixely, RoomSize + 1);
 
-	this->UpPartition->Draw(x, y, RoomSize + 1);
+	this->LeftPartition->Draw(pixelX, pixely + 1, RoomSize - 1);
 
-	this->LeftPartition->Draw(x, y + 1, RoomSize - 1);
+	int downX = pixelX + RoomSize;
+	this->RightPartition->Draw(downX, pixely + 1, RoomSize - 1);
 
-	int downX = x + RoomSize;
-	this->RightPartition->Draw(downX, y + 1, RoomSize - 1);
+	int rightY = pixely + RoomSize;
+	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1);
 
-	int rightY = y + RoomSize;
-	this->DownPartition->Draw(x, rightY, RoomSize + 1);
+	if (this->GetTreasure() > 0) {
+		ConsoleDrawer* consoleDrawer;
+		consoleDrawer = consoleDrawer->GetInstance();
+		consoleDrawer->WriteString(pixelX + 2, pixely + 1, to_string(this->GetTreasure()));
+	}
 }
 
 void Room::Draw()
@@ -55,7 +63,28 @@ IPartition* Room::GetPartition(Side side)
 	case Side::right:
 		return this->RightPartition;
 		break;
+		cout << "partition side not implemented";
 	default:
 		break;
 	}
+}
+
+int Room::GetIndexX()
+{
+	return this->x;
+}
+
+int Room::GetIndexY()
+{
+	return this->y;
+}
+
+int Room::GetRoomSize()
+{
+	return this->RoomSize;
+}
+
+int Room::GetTreasure()
+{
+	return this->treasure;
 }

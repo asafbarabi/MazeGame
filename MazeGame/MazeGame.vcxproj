@@ -151,7 +151,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SideClass.h" />
-    <ClInclude Include="Treasure.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +164,6 @@
     <ClCompile Include="Partition.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

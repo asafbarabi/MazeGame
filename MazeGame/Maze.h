@@ -9,9 +9,10 @@
 class Maze
 {
 public:
-	Maze();
+	Maze(int playerRoomIndex, int treasureRoomIndex);
 	Room* Rooms[25];
 	void Draw();
+
 private:
 	IPartition* CreateRandomPartition(Side side);
 

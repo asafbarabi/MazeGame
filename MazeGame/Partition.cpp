@@ -23,3 +23,9 @@ IRoom* Partition::GetRoomBehind()
 	return this->RoomBehind;
 }
 
+void Partition::SetRoomBehind(IRoom* room)
+{
+	//put if can't Walk through throw exception
+	RoomBehind = room;
+}
+

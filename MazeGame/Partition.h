@@ -17,5 +17,8 @@ public:
 
 	// Inherited via IPartition
 	virtual IRoom* GetRoomBehind() override;
+
+	// Inherited via IPartition
+	virtual void SetRoomBehind(IRoom* room) override;
 };
 

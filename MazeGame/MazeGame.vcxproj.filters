@@ -30,9 +30,6 @@
     <ClInclude Include="Partition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Treasure.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExternalRoom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Partition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Treasure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExternalRoom.cpp">

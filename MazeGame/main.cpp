@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Maze.h"
+#include "Game.h"
 using namespace std;
 
 int main()
@@ -11,8 +11,7 @@ int main()
 	Door leftWall(Side::left);
 	Room room(&upDoor, &downWall, &rightDoor, &leftWall);
 	room.Draw(0,0);*/
-	Maze a;
-	a.Draw();
+	Game g;
 	cout << "\n";
 	system("pause");
 	return 0;
