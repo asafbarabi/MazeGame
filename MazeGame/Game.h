@@ -7,7 +7,8 @@ public:
 	Player* player;
 	Maze* maze;
 
-	Game();
+	Game(int numPlayers = 1);
+	~Game();
 	void StartGame();
 
 private:
@@ -15,6 +16,7 @@ private:
 	int NumberOfRoomsInColumn;
 
 	//return a random index of an external room for the player (external room = a room on the frame of the maze)
-	int GetPlayerExternalRoomIndex();
+	void GetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPlayers);
+	void GettreasureRoomIndex(Treasure* arrTreasure, int numPlayers);
 };
 

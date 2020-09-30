@@ -14,8 +14,10 @@ public:
 	IPartition* LeftPartition;
 	int treasure;
 
+	
 	Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition);
 	Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition, int roomSize);
+	~Room();
 
 	// Draw room on specific x and y
 	void Draw(int x, int y);

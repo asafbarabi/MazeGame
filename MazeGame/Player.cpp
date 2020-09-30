@@ -5,6 +5,7 @@ Player::Player(string name)
 	Score = 0;
 	Steps = 0;
 	this->name = name;
+	int startRoom = 0;
 }
 
 bool Player::Step(Side side)
@@ -38,12 +39,23 @@ bool Player::GetContentOfNextRoom(Side side)
 		return false;
 }
 
-void Player::Draw(int playerNumber)
+void Player::Draw(Player* arrPlayers,int playerNumber)
 {
 	ConsoleDrawer* consoleDrawer;
 	consoleDrawer = consoleDrawer->GetInstance();
 	int indexX = this->CurrentRoom->GetIndexX();
 	int indexY = this->CurrentRoom->GetIndexY();
 	//I added +2 and +1 so it will be drawen inside a room and not beside it
-	consoleDrawer->WriteString(indexX * this->CurrentRoom->GetRoomSize() + 2, indexY * this->CurrentRoom->GetRoomSize() + 1, this->name);
+	int addToX = 2;
+	int addToY = 1;
+	for (int i = 0; i < playerNumber; i++)
+	{
+		if (this->CurrentRoom == arrPlayers[i].CurrentRoom)
+		{
+			addToY += 1;
+		}
+
+	}
+
+	consoleDrawer->WriteString(indexX * this->CurrentRoom->GetRoomSize() + addToX, indexY * this->CurrentRoom->GetRoomSize() + addToY, this->name);
 }

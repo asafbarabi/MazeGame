@@ -8,6 +8,11 @@ Partition::Partition(Side side)
 	this->RoomBehind = nullptr;
 }
 
+Partition::~Partition()
+{
+	delete RoomBehind;
+}
+
 Partition::Partition(Side side, IRoom* roomBehind):Partition(side)
 {
 	this->RoomBehind = roomBehind;

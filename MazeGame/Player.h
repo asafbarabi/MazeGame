@@ -10,13 +10,14 @@ public:
 	int Score;
 	int Steps;
 	string name;
+	int startRoom;
 
-	Player(string name);
+	Player(string name=NULL);
 
 	bool Step(Side side);
 	unsigned int GetFlightDistanceToTreasure();
 	bool GetContentOfNextRoom(Side side);
-	void Draw(int playerNumber);
+	void Draw(Player* arrPlayer,int playerNumber);
 
 	
 

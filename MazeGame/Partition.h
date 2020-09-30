@@ -11,6 +11,7 @@ public:
 	IRoom* RoomBehind;
 
 	Partition(Side side);
+	~Partition();
 	Partition(Side side,IRoom* roomBehind);
 	virtual void Draw(int x, int y, int RoomSize) = 0;
 	virtual bool CanWalkThrough() = 0;

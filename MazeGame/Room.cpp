@@ -17,6 +17,14 @@ Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* right
 
 }
 
+Room::~Room()
+{
+	delete UpPartition;
+	delete DownPartition;
+	delete RightPartition;
+	delete LeftPartition;
+}
+
 //Default ctor with roomSize =ROOM_SIZE
 Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition) :Room(upPartition, downPartition, rightPartition, leftPartition, ROOM_SIZE)
 {

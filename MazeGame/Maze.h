@@ -6,10 +6,12 @@
 #include "Door.h"
 #include <stdlib.h>
 #include <time.h>
+#include "Treasure.h"
 class Maze
 {
 public:
-	Maze(int playerRoomIndex, int treasureRoomIndex);
+	Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers);
+	~Maze();
 	Room* Rooms[25];
 	void Draw();
 
