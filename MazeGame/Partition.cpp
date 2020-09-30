@@ -2,18 +2,18 @@
 #include <iostream>
 using namespace std;
 
-Partition::Partition(Side side)
+Partition::Partition()
 {
-	this->side = side;
 	this->RoomBehind = nullptr;
 }
+
 
 Partition::~Partition()
 {
 	delete RoomBehind;
 }
 
-Partition::Partition(Side side, IRoom* roomBehind):Partition(side)
+Partition::Partition( IRoom* roomBehind)
 {
 	this->RoomBehind = roomBehind;
 }

@@ -3,7 +3,7 @@
 class Wall : public Partition
 {
 public:
-	Wall(Side side);
-	void Draw(int x, int y, int RoomSize);
+	Wall();
+	void Draw(int x, int y, int RoomSize, Side side);
 	bool CanWalkThrough();
 };

@@ -1,67 +1,70 @@
 #include "Maze.h"
-#include "Player.h"
 
-Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers)
+Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers, int roomSize)
 {
 	//create Random doors and walls
-	for (int i = 0; i < 5; i++)
+
+	IPartition* upPartition; IPartition* downPartition = nullptr; IPartition* rightPartition = nullptr; IPartition* leftPartition;
+	for (int i = 0; i < 25; i++)
 	{
-		for (int j = 0; j < 5; j++)
+		if (i > 4)
+			upPartition = Rooms[i - 5]->DownPartition;
+		else
+			upPartition = CreateRandomPartition(up);
+		leftPartition = rightPartition;
+		downPartition = CreateRandomPartition(down);
+		rightPartition = CreateRandomPartition(Side::right);
+
+		if (i == 0 || i == 5 || i == 15 || i == 20)
 		{
-			Rooms[5 * i + j] = new Room(CreateRandomPartition(up), CreateRandomPartition(down), CreateRandomPartition(right), CreateRandomPartition(left));
-			Rooms[5 * i + j]->x = j;
-			Rooms[5 * i + j]->y = i;
-			for (int t = 0; t < numPlayers; t++)
-			{
-				if (5 * i + j == arrTreasure[t].index) {
-					Rooms[5 * i + j]->treasure = arrTreasure[t].value;
-				}
-			}
+			leftPartition = CreateRandomPartition(Side::left);
 		}
+		Rooms[i] = new Room(upPartition, downPartition, rightPartition, leftPartition, roomSize);
+		Rooms[i]->x = i % 5;
+		Rooms[i]->y = i / 5;
 	}
 
-	//TODO add function to add SetRoomBehind to every room
-	/*for (int i = 0; i < 5; i++)
-	{
-		for (int j = 0; j < 5; j++)
-		{
-			if (((5 * i + j) > -1) && ((5 * i + j) < 6)) {
-				Rooms[5 * i + j]->RightPartition->SetRoomBehind(Rooms[5 * i + j]);
-			}
-		}
-	}*/
 
 	for (int i = 0; i < numPlayers; i++)
 	{
-
-
-		int playerIndexX = arrPlayers[i].startRoom % 5;
-		int playerIndexY = arrPlayers[i].startRoom / 5;
+		int playerIndexX = arrPlayers[i].CurrentRoomIndex % 5;
+		int playerIndexY = arrPlayers[i].CurrentRoomIndex / 5;
 		int treasureIndexX = arrTreasure[i].index % 5;
 		int treasureIndexY = arrTreasure[i].index / 5;
 		int numberOfStpesRight = treasureIndexX - playerIndexX;
 		int numberOfStepsDown = treasureIndexY - playerIndexY;
-		int currentRoomIndex = arrPlayers[i].startRoom;
-
+		int currentRoomIndex = arrPlayers[i].CurrentRoomIndex;
+		int typeOfMovment;
 		while (numberOfStpesRight != 0 || numberOfStepsDown != 0)
 		{
-			int typeOfMovment = rand() % 2;
+			cout << currentRoomIndex;
+			if (numberOfStpesRight != 0 && numberOfStepsDown != 0)
+				typeOfMovment = rand() % 2;
+			else
+			{
+				if (numberOfStepsDown != 0)
+					typeOfMovment = 0;
+				else
+					typeOfMovment = 1;
+			}
 			//up or down
 			if (typeOfMovment == 0) {
 				if (numberOfStepsDown > 0) {
 					//delete this partition before assinging it again
 					delete Rooms[currentRoomIndex]->DownPartition;
-					Rooms[currentRoomIndex]->DownPartition = new Door(down);
+					Rooms[currentRoomIndex]->DownPartition = new Door();
 					currentRoomIndex += 5;
-					Rooms[currentRoomIndex]->DownPartition->SetRoomBehind(Rooms[currentRoomIndex]);
+					Rooms[currentRoomIndex]->UpPartition = Rooms[currentRoomIndex - 5]->DownPartition;
+					Rooms[currentRoomIndex - 5]->DownPartition->SetRoomBehind(Rooms[currentRoomIndex]);
 					numberOfStepsDown--;
 				}
 				else if (numberOfStepsDown < 0) {
 					// delete this partition before assinging it again
 					delete Rooms[currentRoomIndex]->UpPartition;
-					Rooms[currentRoomIndex]->UpPartition = new Door(up);
+					Rooms[currentRoomIndex]->UpPartition = new Door();
 					currentRoomIndex -= 5;
-					Rooms[currentRoomIndex]->UpPartition->SetRoomBehind(Rooms[currentRoomIndex]);
+					Rooms[currentRoomIndex]->DownPartition = Rooms[currentRoomIndex + 5]->UpPartition;
+					Rooms[currentRoomIndex + 5]->UpPartition->SetRoomBehind(Rooms[currentRoomIndex]);
 					numberOfStepsDown++;
 				}
 			}
@@ -71,20 +74,23 @@ Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers)
 				if (numberOfStpesRight > 0) {
 					//delete this partition before assinging it again
 					delete Rooms[currentRoomIndex]->RightPartition;
-					Rooms[currentRoomIndex]->RightPartition = new Door(right);
+					Rooms[currentRoomIndex]->RightPartition = new Door();
 					currentRoomIndex += 1;
-					Rooms[currentRoomIndex]->RightPartition->SetRoomBehind(Rooms[currentRoomIndex]);
+					Rooms[currentRoomIndex]->LeftPartition = Rooms[currentRoomIndex - 1]->RightPartition;
+					Rooms[currentRoomIndex - 1]->RightPartition->SetRoomBehind(Rooms[currentRoomIndex]);
 					numberOfStpesRight--;
 				}
 				else if (numberOfStpesRight < 0) {
 					//delete this partition before assinging it again
 					delete Rooms[currentRoomIndex]->LeftPartition;
-					Rooms[currentRoomIndex]->LeftPartition = new Door(left);
+					Rooms[currentRoomIndex]->LeftPartition = new Door();
 					currentRoomIndex -= 1;
-					Rooms[currentRoomIndex]->LeftPartition->SetRoomBehind(Rooms[currentRoomIndex]);
+					Rooms[currentRoomIndex]->RightPartition = Rooms[currentRoomIndex + 1]->LeftPartition;
+					Rooms[currentRoomIndex + 1]->LeftPartition->SetRoomBehind(Rooms[currentRoomIndex]);
 					numberOfStpesRight++;
 				}
 			}
+
 		}
 	}
 
@@ -107,6 +113,14 @@ void Maze::Draw()
 	}
 }
 
+void Maze::Draw(int indentationYAxis)
+{
+	for (int i = 0; i < 25; i++)
+	{
+		Rooms[i]->Draw(Rooms[i]->GetIndexX(), Rooms[i]->GetIndexY(), indentationYAxis);
+	}
+}
+
 IPartition* Maze::CreateRandomPartition(Side side)
 {
 	/* initialize random seed: */
@@ -115,10 +129,10 @@ IPartition* Maze::CreateRandomPartition(Side side)
 	int randomNumber = rand() % 2;
 	//return wall Partition
 	if (randomNumber == 0) {
-		return new Wall(side);
+		return new Wall();
 	}
 	//return Door
 	else {
-		return new Door(side);
+		return new Door();
 	}
 }

@@ -7,13 +7,12 @@
 class Partition : public IPartition
 {
 public:
-	Side side;
 	IRoom* RoomBehind;
 
-	Partition(Side side);
+	Partition();
 	~Partition();
-	Partition(Side side,IRoom* roomBehind);
-	virtual void Draw(int x, int y, int RoomSize) = 0;
+	Partition(IRoom* roomBehind);
+	virtual void Draw(int x, int y, int RoomSize,Side side) = 0;
 	virtual bool CanWalkThrough() = 0;
 
 	// Inherited via IPartition

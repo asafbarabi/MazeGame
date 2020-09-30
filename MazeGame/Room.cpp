@@ -3,7 +3,6 @@
 #include "Room.h"
 #include "ConsoleDrawer.h"
 using namespace std;
-int ROOM_SIZE = 8;
 
 Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition, int roomSize)
 {
@@ -25,30 +24,22 @@ Room::~Room()
 	delete LeftPartition;
 }
 
-//Default ctor with roomSize =ROOM_SIZE
-Room::Room(IPartition* upPartition, IPartition* downPartition, IPartition* rightPartition, IPartition* leftPartition) :Room(upPartition, downPartition, rightPartition, leftPartition, ROOM_SIZE)
-{
-}
 
 void Room::Draw(int x, int y)
 {
 	int pixelX = x * RoomSize;
 	int pixely = y * RoomSize;
-	this->UpPartition->Draw(pixelX, pixely, RoomSize + 1);
+	this->UpPartition->Draw(pixelX, pixely, RoomSize + 1, Side::up);
 
-	this->LeftPartition->Draw(pixelX, pixely + 1, RoomSize - 1);
+	this->LeftPartition->Draw(pixelX, pixely + 1, RoomSize - 1, Side::left);
 
 	int downX = pixelX + RoomSize;
-	this->RightPartition->Draw(downX, pixely + 1, RoomSize - 1);
+	this->RightPartition->Draw(downX, pixely + 1, RoomSize - 1, Side::right);
 
 	int rightY = pixely + RoomSize;
-	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1);
+	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1, Side::down);
 
-	if (this->GetTreasure() > 0) {
-		ConsoleDrawer* consoleDrawer;
-		consoleDrawer = consoleDrawer->GetInstance();
-		consoleDrawer->WriteString(pixelX + 2, pixely + 1, to_string(this->GetTreasure()));
-	}
+	
 }
 
 void Room::Draw()
@@ -56,30 +47,26 @@ void Room::Draw()
 	Draw(x, y);
 }
 
-IPartition* Room::GetPartition(Side side)
-{
-	switch (side)
-	{
-	case Side::up:
-		return this->UpPartition;
-	case Side::down:
-		return this->DownPartition;
-		break;
-	case Side::left:
-		return this->LeftPartition;
-		break;
-	case Side::right:
-		return this->RightPartition;
-		break;
-		cout << "partition side not implemented";
-	default:
-		break;
-	}
-}
 
 int Room::GetIndexX()
 {
 	return this->x;
+}
+
+void Room::Draw(int x, int y, int indentationYAxis)
+{
+	int pixelX = x * RoomSize;
+	int pixely = (y * RoomSize) + indentationYAxis;
+	this->UpPartition->Draw(pixelX, pixely, RoomSize + 1, Side::up);
+
+	this->LeftPartition->Draw(pixelX, pixely + 1, RoomSize - 1, Side::left);
+
+	int downX = pixelX + RoomSize;
+	this->RightPartition->Draw(downX, pixely + 1, RoomSize - 1, Side::right);
+
+	int rightY = pixely + RoomSize;
+	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1, Side::down);
+	
 }
 
 int Room::GetIndexY()
@@ -92,7 +79,23 @@ int Room::GetRoomSize()
 	return this->RoomSize;
 }
 
-int Room::GetTreasure()
+IPartition* Room::GetLeftPartition()
 {
-	return this->treasure;
+	return this->LeftPartition;
 }
+
+IPartition* Room::GetRightPartition()
+{
+	return this->RightPartition;
+}
+
+IPartition* Room::GetUpPartition()
+{
+	return this->UpPartition;
+}
+
+IPartition* Room::GetDownPartition()
+{
+	return this->DownPartition;
+}
+

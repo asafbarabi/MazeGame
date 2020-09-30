@@ -3,9 +3,9 @@
 class Door : public Partition
 {
 public:
-	Door(Side side);
+	Door();
 	bool CanWalkThrough();
 
 	// Inherited via Partition
-	void Draw(int x, int y, int RoomSize);
+	void Draw(int x, int y, int RoomSize, Side side);
 };

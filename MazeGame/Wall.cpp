@@ -5,15 +5,15 @@
 
 using namespace std;
 int WALL_SIZE = 1;
-Wall::Wall(Side side) :Partition(side)
+Wall::Wall() :Partition()
 {
 
 }
-void Wall::Draw(int x, int y, int roomSize)
+void Wall::Draw(int x, int y, int roomSize, Side side)
 {
 	ConsoleDrawer* consoleDrawer;
 	consoleDrawer = consoleDrawer->GetInstance();
-	if (this->side == Side::up || this->side == Side::down)
+	if (side == Side::up || side == Side::down)
 	{
 
 		//Draw pixels
