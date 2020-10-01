@@ -20,5 +20,8 @@ public:
 
 	// Inherited via IPartition
 	virtual void SetRoomBehind(IRoom* room) override;
+
+	// Inherited via IPartition
+	virtual IPartition* Clone() override = 0;
 };
 

@@ -29,219 +29,181 @@ void Game::StartGame()
 
 void Game::StartCycle(Player* players, int numPlayers)
 {
-	int indentationYAxis = numPlayers + 2;
 	srand(time(NULL));
 	Treasure* arrTreasure = new Treasure[numPlayers];
 	//TODO sagi check if not the same index
 	this->SetPlayerExternalRoomIndex(players, numPlayers);
-	this->SetTreasureRoomIndex(arrTreasure,players, numPlayers);
-
+	this->SetTreasureRoomIndex(arrTreasure, players, numPlayers);
 	this->maze = new Maze(players, arrTreasure, numPlayers, ROOM_SIZE);
-	this->maze->Draw(indentationYAxis);
 	for (int i = 0; i < numPlayers; i++)
 	{
 		players[i].CurrentRoom = maze->Rooms[players->CurrentRoomIndex];
-		players[i].Draw(players,arrTreasure, numPlayers, indentationYAxis);
 	}
-	//print treasures
-	for (int i = 0; i < numPlayers; i++)
-	{
-		arrTreasure[i].Draw(ROOM_SIZE, indentationYAxis);
-	}
+	this->maze->Draw(players, arrTreasure, numPlayers);
+
 	bool cycleOver = false;
 	char selectedOption, selecteClue, selecteMove;
 	//only for initalizaion
 	bool stepSucceeded = false;
 	IRoom* roomBehind;
-  indentationYAxis += 40;
 	int flightDistanceToTreasure;
-	int notPlay = 0;
-	int typeGame = 0;
-	
-	do {
-		if (typeGame != 0 && typeGame != 1)
-		{
-			cout << "try again, only 0 or 1\n";
-		}
-		string gameType = "choose the type of the game, 0 is to play, 1 is to check the game(always draw the maze)\n";
-		consoleDrawer.WriteString(0, indentationYAxis += 1, gameType);
-		cin >> typeGame;
-	} while (typeGame != 0 && typeGame != 1);
+	int playersOutOfTheGame = 0;
+	//0 to play, 1 to check the game(always draw the maze)
+	int gameType = 0;
+
+
+	cout << "choose the type of the game, 0 is to play, 1 is to check the game(always draw the maze)\n";
+	cin >> gameType;
+	while (gameType != 0 && gameType != 1) {
+		cout << "invalid input please enter only 1 or 0\n";
+		cin >> gameType;
+	}
+
 	while (!cycleOver) {
+		//loop through every player
 		for (int i = 0; i < numPlayers; i++)
 		{
-			if (players[i].CurrentRoom != NULL) {
+			//if player is out of the maze skip him
+			if (players[i].CurrentRoom == NULL) {
+				continue;
+			}
 
-				string playerTrun = "Now it is " + players[i].name + "'s turn:\nThis is your position:";
-				consoleDrawer.WriteString(0, indentationYAxis += 2, playerTrun);
+			cout << "Now it is " + players[i].name + "'s turn:\nThis is your position:\n\n";
 
-				players[i].CurrentRoom->Draw(0, 0, indentationYAxis += 2);
-				players[i].DrawInSpecificRoom(players, i, indentationYAxis);
+			//Draw player's room and player
+			players[i].DrawInSpecificRoom(ConsoleDrawer::GetInstance()->GetY());
+			players[i].CurrentRoom->Draw(0, 0, ConsoleDrawer::GetInstance()->GetY());
 
-				string chooseMove = "\nInstructions:\nEnter s to stay in the same place\nPress c to get a clue\nPress m to move to an adjacent room\n";
-				consoleDrawer.WriteString(0, indentationYAxis += ROOM_SIZE, chooseMove);
-				do {
-					//selectedOption = 'm';
-					cin >> selectedOption;
-					switch (selectedOption)
-					{
-						indentationYAxis += ROOM_SIZE;
-						//move player
-					case 'm':
-						cout << "Enter u to move up\nEnter d to move down\nEnter r to move right\nEnter l to move left\n";
-						
-						do {
-							cin >> selecteMove;
-							//selectedOption = 'u';
-							switch (selecteMove)
-							{
-							case 'u':
-								stepSucceeded = players[i].Step(Side::up);
-								break;
-							case 'd':
-								stepSucceeded = players[i].Step(Side::down);
-								break;
-							case 'r':
-								stepSucceeded = players[i].Step(Side::right);
-								break;
-							case 'l':
-								stepSucceeded = players[i].Step(Side::left);
-								break;
-							default:
-								cout << "invalid input! try again\n";
-								indentationYAxis += 2;
-								break;
-							}
-							indentationYAxis += 1;
-							if (players[i].CurrentRoom == NULL)
-							{
-								notPlay++;
-							}
-							else if (players[i].CheckIfWon(arrTreasure, numPlayers)) {
+
+			cout << "\nInstructions:\nEnter s to stay in the same place\nPress c to get a clue\nPress m to move to an adjacent room\n";
+			do {
+				//selectedOption = 'm';
+				cin >> selectedOption;
+				switch (selectedOption)
+				{
+					//move player
+				case 'm':
+					cout << "Enter u to move up\nEnter d to move down\nEnter r to move right\nEnter l to move left\n";
+
+					do {
+						cin >> selecteMove;
+						//selectedOption = 'u';
+						switch (selecteMove)
+						{
+						case 'u':
+							stepSucceeded = players[i].Step(Side::up);
+							break;
+						case 'd':
+							stepSucceeded = players[i].Step(Side::down);
+							break;
+						case 'r':
+							stepSucceeded = players[i].Step(Side::right);
+							break;
+						case 'l':
+							stepSucceeded = players[i].Step(Side::left);
+							break;
+						default:
+							cout << "invalid input! try again\n";
+							break;
+						}
+
+						//check if the player is out of the maze
+						if (players[i].CurrentRoom == NULL) {
+							playersOutOfTheGame++;
+							//check if need to end the game because all the players lost
+							if (playersOutOfTheGame == numPlayers) {
 								cycleOver = true;
-								players[i].totalScore += players[i].Score;
-								string winner = "the winner is " + players[i].name + " his score for this game " + to_string(players[i].Score) + "\n"
-									+ " the total score of every player:\n";
-								consoleDrawer.WriteString(0, indentationYAxis += ROOM_SIZE, winner);
-								for (int j = 0; j < numPlayers; j++)
-								{
-									if (i!=j)
-									players[j].totalScore -= players[j].Steps;
-									players[j].Steps = 0;
-									players[j].Score = 0;
-									cout << players[j].name + " Total Score " + to_string(players[j].totalScore);
-								}
-								indentationYAxis = indentationYAxis + 3 + numPlayers ;
 								break;
 							}
-							if (!stepSucceeded)
-								cout << "couldn't walk there, there is a wall please choose anotehr side\n";
-							indentationYAxis += 2;
-						} while ((selecteMove != 'u' && selecteMove != 'd' && selecteMove != 'r' && selecteMove != 'l') || !stepSucceeded);
-						break;
-						//get a clue
-					case 'c':
-						cout << "Enter k to get the distance to the closest treasure\nEnter u to get a clue about the room that is above you\nEnter d to get a clue about the room that is blow you\nEnter r to get a clue about the room that is to the right of you\nEnter l to get a clue about the room that is to the left of you\n";
-						cin >> selecteClue;
-						do {
-							
-							switch (selecteClue)
-							{
-							case 'u':
-								players[i].PeekToRoomBehind(Side::up, indentationYAxis += 12);
-								break;
-							case 'd':
-								players[i].PeekToRoomBehind(Side::down, indentationYAxis += 12);
-								break;
-							case 'r':
-								players[i].PeekToRoomBehind(Side::right, indentationYAxis += 12);
-								break;
-							case 'l':
-								players[i].PeekToRoomBehind(Side::left, indentationYAxis += 12);
-								break;
-							case 'k':
-								flightDistanceToTreasure = players[i].GetFlightDistanceToTreasure(arrTreasure, numPlayers);
-								cout << "the distance between you and the closet treasure is: " + to_string(flightDistanceToTreasure) + "\n";
-								indentationYAxis += 5;
-								break;
-							default:
-								cout << "invalid input! try again\n";
-								indentationYAxis += 2;
-								break;
-							}
-							indentationYAxis += 3;
-						} while (selecteClue != 'k' && selecteClue != 'u' && selecteClue != 'd' && selecteClue != 'r' && selecteClue != 'l');
-						break;
-					case 's':
-						indentationYAxis += 2;
-						break;
-					default:
-						cout << "invalid input! try again\n";
-						indentationYAxis += 2;
-						break;
-					}
-					
-					//consoleDrawer.WriteString(0, indentationYAxis++ , players[i].name + " has " + to_string(players[i].Steps) + " steps");
-				} while (selectedOption != 's' && selectedOption != 'c' && selectedOption != 'm');
-			}
-			players[i].Steps += 1;
-			if (typeGame == 1 && !cycleOver) {
-				maze->Draw(indentationYAxis += 8);
-				for (int i = 0; i < numPlayers; i++)
-				{
-					players[i].CurrentRoom = maze->Rooms[players->CurrentRoomIndex];
-					players[i].Draw(players, arrTreasure, numPlayers, indentationYAxis);
+						}
+
+						//check if player won
+						else if (players[i].CheckIfWon(arrTreasure, numPlayers)) {
+							cycleOver = true;
+							cout << "the winner is " + players[i].name + " his score for this game " + to_string(players[i].Score) + "\n";
+							break;
+						}
+						if (!stepSucceeded)
+							cout << "couldn't walk there, there is a wall please choose anotehr side\n";
+					} while ((selecteMove != 'u' && selecteMove != 'd' && selecteMove != 'r' && selecteMove != 'l') || !stepSucceeded);
+					break;
+					//get a clue
+				case 'c':
+					cout << "Enter k to get the distance to the closest treasure\nEnter u to get a clue about the room that is above you\nEnter d to get a clue about the room that is blow you\nEnter r to get a clue about the room that is to the right of you\nEnter l to get a clue about the room that is to the left of you\n";
+					cin >> selecteClue;
+					do {
+
+						switch (selecteClue)
+						{
+						case 'u':
+							players[i].PeekToRoomBehind(Side::up, ConsoleDrawer::GetInstance()->GetY());
+							break;
+						case 'd':
+							players[i].PeekToRoomBehind(Side::down, ConsoleDrawer::GetInstance()->GetY());
+							break;
+						case 'r':
+							players[i].PeekToRoomBehind(Side::right, ConsoleDrawer::GetInstance()->GetY());
+							break;
+						case 'l':
+							players[i].PeekToRoomBehind(Side::left, ConsoleDrawer::GetInstance()->GetY());
+							break;
+						case 'k':
+							flightDistanceToTreasure = players[i].GetFlightDistanceToTreasure(arrTreasure, numPlayers);
+							cout << "the distance between you and the closet treasure is: " + to_string(flightDistanceToTreasure) + "\n";
+							break;
+						default:
+							cout << "invalid input! try again\n";
+							break;
+						}
+					} while (selecteClue != 'k' && selecteClue != 'u' && selecteClue != 'd' && selecteClue != 'r' && selecteClue != 'l');
+					break;
+				case 's':
+					break;
+				default:
+					cout << "invalid input! try again\n";
+					break;
 				}
-				//print treasures
-				for (int i = 0; i < numPlayers; i++)
-				{
-					arrTreasure[i].Draw(ROOM_SIZE, indentationYAxis);
-				}
-				indentationYAxis += 40;
+
+			} while (selectedOption != 's' && selectedOption != 'c' && selectedOption != 'm');
+
+			if (gameType == 1 && !cycleOver) {
+				maze->Draw(players, arrTreasure, numPlayers);
 			}
 		}
-		if (numPlayers == notPlay)
+	}
+	maze->Draw(players, arrTreasure, numPlayers);
+
+	//if no one won the game
+	if (numPlayers == playersOutOfTheGame)
+	{
+		cout << "no more moves, game ends\n the total score of every player:\n";
+
+		for (int j = 0; j < numPlayers; j++)
 		{
-			string end = "no more moves, game ends\n the total score of every player:\n";
-			consoleDrawer.WriteString(0, indentationYAxis += ROOM_SIZE, end);
-
-			for (int j = 0; j < numPlayers; j++)
-			{
-				players[j].totalScore -= players[j].Steps;
-				players[j].Steps = 0;
-				players[j].Score = 0;
-				cout << players[j].name + " Total Score " + to_string(players[j].totalScore);
-			}
-			indentationYAxis = indentationYAxis + 3 + numPlayers ;
-
-			maze->Draw(indentationYAxis += 8);
-			for (int i = 0; i < numPlayers; i++)
-			{
-				players[i].CurrentRoom = maze->Rooms[players->CurrentRoomIndex];
-				players[i].Draw(players, arrTreasure, numPlayers, indentationYAxis);
-			}
-			//print treasures
-			for (int i = 0; i < numPlayers; i++)
-			{
-				arrTreasure[i].Draw(ROOM_SIZE, indentationYAxis);
-			}
-			indentationYAxis += 45;
-			cycleOver = true;
+			players[j].totalScore -= players[j].Steps;
+			players[j].Steps = 0;
+			players[j].Score = 0;
+			cout << players[j].name + " Total Score " + to_string(players[j].totalScore);
 		}
 	}
-	maze->Draw(indentationYAxis += 8);
-	for (int i = 0; i < numPlayers; i++)
+	//if somebody won
+	else 
 	{
-		players[i].CurrentRoom = maze->Rooms[players->CurrentRoomIndex];
-		players[i].Draw(players, arrTreasure, numPlayers, indentationYAxis);
+		for (int i = 0; i < numPlayers; i++)
+		{
+			if (players[i].Score > 0) {
+				players[i].totalScore += players[i].Score - players[i].Steps;
+			}
+			else
+				players[i].totalScore -= players[i].Steps;
+
+			players[i].Steps = 0;
+			players[i].Score = 0;
+			cout << players[i].name + " Total Score " + to_string(players[i].totalScore);
+
+
+		}
 	}
-	//print treasures
-	for (int i = 0; i < numPlayers; i++)
-	{
-		arrTreasure[i].Draw(ROOM_SIZE, indentationYAxis);
-	}
-	indentationYAxis += 45;
-	cycleOver = true;
 }
 
 void Game::SetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPlayers)
@@ -250,8 +212,8 @@ void Game::SetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPla
 	for (int i = 0; i < numPlayers; i++)
 	{
 		srand(time(NULL));
-		
-		
+
+
 		playersRandomRoomIndex[i].CurrentRoomIndex = rand() % 25;
 		if (playersRandomRoomIndex[i].CurrentRoomIndex > 5 && playersRandomRoomIndex[i].CurrentRoomIndex < 9)
 		{
@@ -274,12 +236,12 @@ void Game::SetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPla
 			else
 				playersRandomRoomIndex[i].CurrentRoomIndex = 15;
 		}
-	
+
 
 	}
 }
 
-void Game::SetTreasureRoomIndex(Treasure* arrTreasure,Player* players, int numPlayers)
+void Game::SetTreasureRoomIndex(Treasure* arrTreasure, Player* players, int numPlayers)
 {
 	for (int i = 0; i < numPlayers; i++)
 	{
@@ -291,20 +253,20 @@ void Game::SetTreasureRoomIndex(Treasure* arrTreasure,Player* players, int numPl
 			else
 				arrTreasure[i].index = 5;
 		}
-			if(arrTreasure[i].index>10 && arrTreasure[i].index<14)
-			{
-				if (arrTreasure[i].index - 10 > 14 - arrTreasure[i].index)
-					arrTreasure[i].index = 14;
-				else
-					arrTreasure[i].index = 10;
-			}
-				if(arrTreasure[i].index>15 && arrTreasure[i].index<19)
-				{
-					if (arrTreasure[i].index - 15 > 19 - arrTreasure[i].index)
-						arrTreasure[i].index = 19;
-					else
-						arrTreasure[i].index = 15;
-				}
+		if (arrTreasure[i].index > 10 && arrTreasure[i].index < 14)
+		{
+			if (arrTreasure[i].index - 10 > 14 - arrTreasure[i].index)
+				arrTreasure[i].index = 14;
+			else
+				arrTreasure[i].index = 10;
+		}
+		if (arrTreasure[i].index > 15 && arrTreasure[i].index < 19)
+		{
+			if (arrTreasure[i].index - 15 > 19 - arrTreasure[i].index)
+				arrTreasure[i].index = 19;
+			else
+				arrTreasure[i].index = 15;
+		}
 		arrTreasure[i].value = rand() % 1000;
 		for (int j = 0; j < numPlayers; j++)
 		{

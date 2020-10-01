@@ -14,7 +14,7 @@ bool Player::CheckIfWon(Treasure* arrTreasure, int numberOfTreasuers)
 	for (int i = 0; i < numberOfTreasuers; i++)
 	{
 		if (arrTreasure[i].index == this->CurrentRoomIndex) {
-			this->Score = arrTreasure[i].value - this->Steps-1;
+			this->Score = arrTreasure[i].value - this->Steps - 1;
 			return true;
 		}
 	}
@@ -24,23 +24,25 @@ bool Player::CheckIfWon(Treasure* arrTreasure, int numberOfTreasuers)
 bool Player::Step(Side side)
 {
 	IPartition* selectedPartition = GetPartition(side);
-	
+
 	if (selectedPartition->CanWalkThrough())
 	{
+		this->Steps++;
 		if (selectedPartition->GetRoomBehind() != NULL) {
+
 			this->CurrentRoom = selectedPartition->GetRoomBehind();
-			
 			this->CurrentRoomIndex = (selectedPartition->GetRoomBehind()->GetIndexX()) + (selectedPartition->GetRoomBehind()->GetIndexY() * 5);
 			return true;
 		}
 		else
 		{
 			this->CurrentRoom = NULL;
+			this->CurrentRoomIndex = -1;
 			return true;
 		}
 	}
-	
-		return false;
+
+	return false;
 }
 
 void Player::PeekToRoomBehind(Side side, int indentationYAxis)
@@ -68,9 +70,10 @@ void Player::PeekToRoomBehind(Side side, int indentationYAxis)
 	}
 	else {
 		//add indentation to y axix
+		this->Steps++;
 		roomBehind->Draw(0, 0, indentationYAxis);
 	}
-	
+
 }
 
 unsigned int Player::GetFlightDistanceToTreasure(Treasure* arrTreasure, int numberOfTreasuers)
@@ -86,6 +89,7 @@ unsigned int Player::GetFlightDistanceToTreasure(Treasure* arrTreasure, int numb
 		if (lengthInRoomsFromTreasure < shortestlengthInRoomsFromTreasure)
 			shortestlengthInRoomsFromTreasure = lengthInRoomsFromTreasure;
 	}
+	this->Steps++;
 	return shortestlengthInRoomsFromTreasure;
 }
 
@@ -95,17 +99,15 @@ bool Player::GetContentOfNextRoom(Side side)
 	if (selectedPartition->CanWalkThrough())
 	{
 		//this->CurrentRoom = selectedPartition->GetRoomBehind();
-		
+
 		return true;
 	}
 	else
 		return false;
 }
 
-void Player::Draw(Player* arrPlayers,Treasure* treasure, int numberOfPlayers, int indentationYAxis)
+void Player::Draw(Player* arrPlayers, Treasure* treasure, int numberOfPlayers, int indentationYAxis)
 {
-	ConsoleDrawer* consoleDrawer;
-	consoleDrawer = consoleDrawer->GetInstance();
 	int indexX = this->CurrentRoom->GetIndexX();
 	int indexY = this->CurrentRoom->GetIndexY();
 	//I added +2 and +1 so it will be drawen inside a room and not beside it
@@ -113,22 +115,23 @@ void Player::Draw(Player* arrPlayers,Treasure* treasure, int numberOfPlayers, in
 	int addToY = 1;
 	for (int i = 0; i < numberOfPlayers; i++)
 	{
-		if (this->CurrentRoom == arrPlayers[i].CurrentRoom) 
+		if (this->CurrentRoom == arrPlayers[i].CurrentRoom)
 			addToY += 1;
-		if( this->CurrentRoomIndex == treasure[i].index)
+		if (this->CurrentRoomIndex == treasure[i].index)
 			addToY += 1;
 
 	}
-
-	consoleDrawer->WriteString(indexX * this->CurrentRoom->GetRoomSize() + addToX, indentationYAxis + indexY * this->CurrentRoom->GetRoomSize() + addToY, this->name);
+	int previousY = ConsoleDrawer::GetInstance()->GetY();
+	ConsoleDrawer::GetInstance()->WriteString(indexX * this->CurrentRoom->GetRoomSize() + addToX, indentationYAxis + indexY * this->CurrentRoom->GetRoomSize() + addToY, this->name);
+	//return the curser to its last location
+	ConsoleDrawer::GetInstance()->SetConsoleCurserCoordinate(0, previousY);
 }
 
-void Player::DrawInSpecificRoom(Player* arrPlayer, int playerNumber, int indentationYAxis)
+void Player::DrawInSpecificRoom(int indentationYAxis)
 {
-	ConsoleDrawer* consoleDrawer;
-	consoleDrawer = consoleDrawer->GetInstance();
-
-	consoleDrawer->WriteString(2, indentationYAxis+1, this->name);
+	int previousY = ConsoleDrawer::GetInstance()->GetY();
+	ConsoleDrawer::GetInstance()->WriteString(2, indentationYAxis + 1, this->name);
+	ConsoleDrawer::GetInstance()->SetConsoleCurserCoordinate(0, previousY);
 }
 
 IPartition* Player::GetPartition(Side side)

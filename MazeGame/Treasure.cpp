@@ -7,20 +7,19 @@ Treasure::Treasure(int value, int index) {
 }
 void Treasure::Draw(int roomSize)
 {
-	ConsoleDrawer* consoleDrawer;
-	consoleDrawer = consoleDrawer->GetInstance();
+	int previousY = ConsoleDrawer::GetInstance()->GetY();
 	int PixelX = (index % 5) * roomSize;
 	int PixelY = (index / 5) * roomSize;
-
-	consoleDrawer->WriteString(PixelX+2, PixelY+1, to_string(this->value));
+	ConsoleDrawer::GetInstance()->WriteString(PixelX + 2, PixelY + 1, to_string(this->value));
+	ConsoleDrawer::GetInstance()->SetConsoleCurserCoordinate(0, previousY);
 }
 void Treasure::Draw(int roomSize, int indentationYAxis)
 {
-	ConsoleDrawer* consoleDrawer;
-	consoleDrawer = consoleDrawer->GetInstance();
+	int previousY = ConsoleDrawer::GetInstance()->GetY();
 	int PixelX = (index % 5) * roomSize;
 	int PixelY = (index / 5) * roomSize;
+	ConsoleDrawer::GetInstance()->WriteString(PixelX + 2, PixelY + 1 + indentationYAxis, to_string(this->value));
+	ConsoleDrawer::GetInstance()->SetConsoleCurserCoordinate(0, previousY);
 
-	consoleDrawer->WriteString(PixelX + 2, PixelY + 1+ indentationYAxis, to_string(this->value));
 }
 

@@ -8,4 +8,7 @@ public:
 
 	// Inherited via Partition
 	void Draw(int x, int y, int RoomSize, Side side);
+
+	// Inherited via Partition
+	virtual IPartition* Clone() override;
 };

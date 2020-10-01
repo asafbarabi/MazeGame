@@ -38,6 +38,11 @@ void Door::Draw(int x, int y, int roomSize, Side side)
 	}
 }
 
+IPartition* Door::Clone()
+{
+	return new Door();
+}
+
 bool Door::CanWalkThrough()
 {
 	return true;

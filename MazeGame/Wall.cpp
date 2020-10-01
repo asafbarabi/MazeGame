@@ -42,3 +42,8 @@ bool Wall::CanWalkThrough()
 {
 	return false;
 }
+
+IPartition* Wall::Clone()
+{
+	return new Wall();
+}

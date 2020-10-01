@@ -14,8 +14,8 @@ public:
 	Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers, int roomSize);
 	~Maze();
 	Room* Rooms[25];
-	void Draw();
-	void Draw(int indentationYAxis);
+	void Draw(Player* players, Treasure* arrTreasure, int numPlayers);
+	void Draw(int indentationYAxis, Player* players, Treasure* arrTreasure, int numPlayers);
 
 private:
 	IPartition* CreateRandomPartition(Side side);

@@ -10,6 +10,7 @@ public:
 	virtual bool CanWalkThrough() = 0;
 	virtual IRoom* GetRoomBehind() = 0;
 	virtual void SetRoomBehind(IRoom* room) = 0;
+	virtual IPartition* Clone() = 0;
 
 };
 

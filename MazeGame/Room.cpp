@@ -39,7 +39,7 @@ void Room::Draw(int x, int y)
 	int rightY = pixely + RoomSize;
 	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1, Side::down);
 
-	
+
 }
 
 void Room::Draw()
@@ -66,7 +66,7 @@ void Room::Draw(int x, int y, int indentationYAxis)
 
 	int rightY = pixely + RoomSize;
 	this->DownPartition->Draw(pixelX, rightY, RoomSize + 1, Side::down);
-	
+
 }
 
 int Room::GetIndexY()
