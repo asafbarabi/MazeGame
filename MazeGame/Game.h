@@ -17,7 +17,7 @@ private:
 	int NumberOfRoomsInColumn;
 
 	//return a random index of an external room for the player (external room = a room on the frame of the maze)
-	void GetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPlayers);
-	void GetTreasureRoomIndex(Treasure* arrTreasure, int numPlayers);
+	void SetPlayerExternalRoomIndex(Player* playersRandomRoomIndex, int numPlayers);
+	void SetTreasureRoomIndex(Treasure* arrTreasure, Player* players, int numPlayers);
 };
 

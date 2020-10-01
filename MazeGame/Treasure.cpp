@@ -14,3 +14,13 @@ void Treasure::Draw(int roomSize)
 
 	consoleDrawer->WriteString(PixelX+2, PixelY+1, to_string(this->value));
 }
+void Treasure::Draw(int roomSize, int indentationYAxis)
+{
+	ConsoleDrawer* consoleDrawer;
+	consoleDrawer = consoleDrawer->GetInstance();
+	int PixelX = (index % 5) * roomSize;
+	int PixelY = (index / 5) * roomSize;
+
+	consoleDrawer->WriteString(PixelX + 2, PixelY + 1+ indentationYAxis, to_string(this->value));
+}
+

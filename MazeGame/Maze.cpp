@@ -15,7 +15,7 @@ Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers, int roomSi
 		downPartition = CreateRandomPartition(down);
 		rightPartition = CreateRandomPartition(Side::right);
 
-		if (i == 0 || i == 5 || i == 15 || i == 20)
+		if (i == 0 || i == 5 || i==10 || i == 15 || i == 20)
 		{
 			leftPartition = CreateRandomPartition(Side::left);
 		}
@@ -24,6 +24,28 @@ Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers, int roomSi
 		Rooms[i]->y = i / 5;
 	}
 
+	//set roombehind
+	for (int i = 0; i < 25; i++)
+	{
+		if (i <= 4)
+		Rooms[i]->UpPartition->SetRoomBehind(NULL);
+		else 
+			Rooms[i]->UpPartition->SetRoomBehind(Rooms[i - 5]);
+		if (i >= 20)
+			Rooms[i]->DownPartition->SetRoomBehind(NULL);
+		else
+			Rooms[i]->DownPartition->SetRoomBehind(Rooms[i + 5]);
+		if (i == 4 || i == 9 || i == 14 || i==19 || i == 24)
+			Rooms[i]->RightPartition->SetRoomBehind(NULL);
+		else 
+			Rooms[i]->RightPartition->SetRoomBehind(Rooms[i+1]);
+		if (i == 0 || i == 5 ||i==10 || i == 15 || i == 20)
+			Rooms[i]->LeftPartition->SetRoomBehind(NULL);
+		else
+			Rooms[i]->LeftPartition->SetRoomBehind(Rooms[i-1]);
+		
+
+	}
 
 	for (int i = 0; i < numPlayers; i++)
 	{
@@ -37,7 +59,7 @@ Maze::Maze(Player* arrPlayers, Treasure* arrTreasure, int numPlayers, int roomSi
 		int typeOfMovment;
 		while (numberOfStpesRight != 0 || numberOfStepsDown != 0)
 		{
-			cout << currentRoomIndex;
+			
 			if (numberOfStpesRight != 0 && numberOfStepsDown != 0)
 				typeOfMovment = rand() % 2;
 			else

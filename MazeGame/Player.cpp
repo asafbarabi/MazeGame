@@ -2,8 +2,9 @@
 
 Player::Player()
 {
-	string name = "sagi";
+	string name = "hai";
 	Score = 0;
+	totalScore = 0;
 	Steps = 0;
 	this->name = name;
 	int startRoom = 0;
@@ -13,7 +14,7 @@ bool Player::CheckIfWon(Treasure* arrTreasure, int numberOfTreasuers)
 	for (int i = 0; i < numberOfTreasuers; i++)
 	{
 		if (arrTreasure[i].index == this->CurrentRoomIndex) {
-			this->Score = arrTreasure[i].value - this->Steps;
+			this->Score = arrTreasure[i].value - this->Steps-1;
 			return true;
 		}
 	}
@@ -23,13 +24,22 @@ bool Player::CheckIfWon(Treasure* arrTreasure, int numberOfTreasuers)
 bool Player::Step(Side side)
 {
 	IPartition* selectedPartition = GetPartition(side);
+	
 	if (selectedPartition->CanWalkThrough())
 	{
-		this->CurrentRoom = selectedPartition->GetRoomBehind();
-		this->Steps++;
-		return true;
+		if (selectedPartition->GetRoomBehind() != NULL) {
+			this->CurrentRoom = selectedPartition->GetRoomBehind();
+			
+			this->CurrentRoomIndex = (selectedPartition->GetRoomBehind()->GetIndexX()) + (selectedPartition->GetRoomBehind()->GetIndexY() * 5);
+			return true;
+		}
+		else
+		{
+			this->CurrentRoom = NULL;
+			return true;
+		}
 	}
-	else
+	
 		return false;
 }
 
@@ -48,7 +58,7 @@ void Player::PeekToRoomBehind(Side side, int indentationYAxis)
 		roomBehind = this->CurrentRoom->GetLeftPartition()->GetRoomBehind();
 		break;
 	case Side::right:
-		roomBehind = this->CurrentRoom->GetLeftPartition()->GetRoomBehind();
+		roomBehind = this->CurrentRoom->GetRightPartition()->GetRoomBehind();
 		break;
 	default:
 		break;
@@ -60,7 +70,7 @@ void Player::PeekToRoomBehind(Side side, int indentationYAxis)
 		//add indentation to y axix
 		roomBehind->Draw(0, 0, indentationYAxis);
 	}
-	Steps++;
+	
 }
 
 unsigned int Player::GetFlightDistanceToTreasure(Treasure* arrTreasure, int numberOfTreasuers)
@@ -72,7 +82,7 @@ unsigned int Player::GetFlightDistanceToTreasure(Treasure* arrTreasure, int numb
 		int playerIndexY = this->CurrentRoomIndex / 5;
 		int treasureIndexX = arrTreasure[i].index % 5;
 		int treasureIndexY = arrTreasure[i].index / 5;
-		int lengthInRoomsFromTreasure = abs(treasureIndexX - playerIndexX) + abs(treasureIndexY - playerIndexY);
+		int lengthInRoomsFromTreasure = hypot(abs(treasureIndexX - playerIndexX), abs(treasureIndexY - playerIndexY));
 		if (lengthInRoomsFromTreasure < shortestlengthInRoomsFromTreasure)
 			shortestlengthInRoomsFromTreasure = lengthInRoomsFromTreasure;
 	}
@@ -85,14 +95,14 @@ bool Player::GetContentOfNextRoom(Side side)
 	if (selectedPartition->CanWalkThrough())
 	{
 		//this->CurrentRoom = selectedPartition->GetRoomBehind();
-		this->Steps++;
+		
 		return true;
 	}
 	else
 		return false;
 }
 
-void Player::Draw(Player* arrPlayers, int numberOfPlayers, int indentationYAxis)
+void Player::Draw(Player* arrPlayers,Treasure* treasure, int numberOfPlayers, int indentationYAxis)
 {
 	ConsoleDrawer* consoleDrawer;
 	consoleDrawer = consoleDrawer->GetInstance();
@@ -103,14 +113,22 @@ void Player::Draw(Player* arrPlayers, int numberOfPlayers, int indentationYAxis)
 	int addToY = 1;
 	for (int i = 0; i < numberOfPlayers; i++)
 	{
-		if (this->CurrentRoom == arrPlayers[i].CurrentRoom)
-		{
+		if (this->CurrentRoom == arrPlayers[i].CurrentRoom) 
 			addToY += 1;
-		}
+		if( this->CurrentRoomIndex == treasure[i].index)
+			addToY += 1;
 
 	}
 
 	consoleDrawer->WriteString(indexX * this->CurrentRoom->GetRoomSize() + addToX, indentationYAxis + indexY * this->CurrentRoom->GetRoomSize() + addToY, this->name);
+}
+
+void Player::DrawInSpecificRoom(Player* arrPlayer, int playerNumber, int indentationYAxis)
+{
+	ConsoleDrawer* consoleDrawer;
+	consoleDrawer = consoleDrawer->GetInstance();
+
+	consoleDrawer->WriteString(2, indentationYAxis+1, this->name);
 }
 
 IPartition* Player::GetPartition(Side side)

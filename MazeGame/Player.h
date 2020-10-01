@@ -9,7 +9,7 @@ class Player
 {
 public:
 	IRoom* CurrentRoom;
-	int Score;
+	int Score, totalScore;
 	int Steps;
 	string name;
 	int CurrentRoomIndex;
@@ -22,8 +22,8 @@ public:
 	void PeekToRoomBehind(Side side, int indentationYAxis);
 	unsigned int GetFlightDistanceToTreasure(Treasure* arrTreasure, int numberOfTreasuers);
 	bool GetContentOfNextRoom(Side side);
-	void Draw(Player* arrPlayer, int playerNumber, int indentationYAxis);
-
+	void Draw(Player* arrPlayer, Treasure* treasure, int playerNumber, int indentationYAxis);
+	void DrawInSpecificRoom(Player* arrPlayer, int playerNumber, int indentationYAxis);
 private:
 	IPartition* GetPartition(Side side);
 

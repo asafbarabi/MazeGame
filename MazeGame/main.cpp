@@ -11,7 +11,10 @@ int main()
 	Door leftWall(Side::left);
 	Room room(&upDoor, &downWall, &rightDoor, &leftWall);
 	room.Draw(0,0);*/
-	Game g;
+	int numPlayers;
+	cout << "Hi, How many players ? ";
+	cin >> numPlayers;
+	Game g(numPlayers);
 	cout << "\n";
 	system("pause");
 	return 0;
